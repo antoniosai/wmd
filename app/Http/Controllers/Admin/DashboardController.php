@@ -5,22 +5,23 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-use App\Model\Tranksaksi\Order;
+use App\Model\Tranksaksi\OrderTemp;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        $data = null;
+        $data = [
+            'pendapatan_hari_ini' => OrderTemp::where('status', 'selesai')->whereDate('created_at', date('Y-m-d'))->sum('total'),
+            'total_order' => OrderTemp::whereDate('created_at', date('Y-m-d'))->count()
+        ];
 
-        return view('admin.dashboard', [
-            'data' => $data
-        ]);
+        return view('admin.dashboard', $data);
     }
 
     public function data()
     {
-        $order = Order::count();
+        $order = OrderTemp::count();
         $pengunjung = Pengunjung::count();
 
         $data = [

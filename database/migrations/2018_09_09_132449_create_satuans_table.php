@@ -15,7 +15,7 @@ class CreateSatuansTable extends Migration
     {
         Schema::create('satuan', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
+            $table->string('nama');
         });
     }
 

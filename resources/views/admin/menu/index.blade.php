@@ -6,24 +6,28 @@ Manajemen Menu
 
 @section('content')
 <div class="row">
-    <div class="col-sm-12">
-        <h3>Manajemen Menu</h3>
-        <hr>
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-sm-8 col-4">
+                <h3>Manajemen Menu</h3>
+            </div>
+            <div class="col-sm-4 col-8 text-right m-b-30">
+                <a href="{{ route('admin.menu.add') }}" class="btn btn-success btn-rounded pull-right"><i class="fa fa-plus"></i> Tambah Menu Baru</a>
+            </div>
+        </div>
         <div class="card-box">
             <div class="card-block">
                 <table class="table table-stripped" id="data-menu">
                     <thead>
                         <tr>
                             <th style="width: 12%">Gambar Menu</th>
-                            <th style="width: 30%">Nama Menu</th>
-                            <th style="width: 30%">Harga</th>
                             <th style="width: 15%">Kategori</th>
-                            <th style="width: 5%">Penjualan Hari Ini</th>
-                            <th style="width: 10%">Aksi</th>
+                            <th style="width: 15%">Nama Menu</th>
+                            <th style="width: 10%">Harga</th>
+                            <th style="width: 13%">Penjualan Hari Ini</th>
+                            <th style="width: 8%">Aksi</th>
                         </tr>
                     </thead>
-                        
-                        
                 </table>
             </div>
         </div>
@@ -39,10 +43,10 @@ var data_menu =  $('#data-menu').DataTable({
     serverSide: true,
     ajax: '{!! route('admin.menu.data') !!}',
     columns: [
-        { data: 'foto', name: 'foto', orderable: false },
+        { data: 'foto', name: 'foto', orderable: false, searchable:false },
+        { data: 'kategori.nama', name: 'kategori.nama', orderable: false, searchable:false },
         { data: 'nama', name: 'nama' },
         { data: 'harga', name: 'harga' },
-        { data: 'kategori.nama', name: 'kategori.nama' },
         { data: 'harga', name: 'harga' },
         { data: 'action', name: 'action', orderable: false, searchable:false }
     ]

@@ -214,6 +214,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
         //3rd Datatables
+        'IndoTgl' => App\Helpers\IndoTgl::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
 
     ],

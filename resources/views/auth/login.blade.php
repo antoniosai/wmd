@@ -1,4 +1,4 @@
-
+@php $info = App\Info\Restaurant::first(); @endphp
 <!DOCTYPE html>
 <html>
 
@@ -7,8 +7,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-    <link rel="shortcut icon" type="image/x-icon" href="https://dreamguys.co.in/preadmin/orange/assets/img/favicon.png">
-    <title>Preadmin - Bootstrap Admin Template</title>
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('images/logo2.png') }}">
+    <title>Login Si Dori</title>
     <link href="https://fonts.googleapis.com/css?family=Fira+Sans:400,500,600,700" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://dreamguys.co.in/preadmin/orange/assets/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://dreamguys.co.in/preadmin/orange/assets/css/font-awesome.min.css">
@@ -23,11 +23,11 @@
     <div class="main-wrapper">
         <div class="account-page">
             <div class="container">
-                <h3 class="account-title">Login</h3>
+                <h3 class="account-title">Login Si Dori</h3>
                 <div class="account-box">
                     <div class="account-wrapper">
                         <div class="account-logo">
-                            <a href="index.html"><img src="https://dreamguys.co.in/preadmin/orange/assets/img/logo2.png" alt="Preadmin"></a>
+                            <a href="index.html"><img src="{{ asset('images/logo2.png') }}" alt="Preadmin"></a>
                         </div>
                         <form action="{{ route('login') }}" method="POST">
                             {{ csrf_field() }}

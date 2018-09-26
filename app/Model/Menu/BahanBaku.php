@@ -17,6 +17,6 @@ class BahanBaku extends Model
 
     public function satuan()
     {
-        return $this->hasMany('App\Model\Menu\Satuan', 'satuan_id');
+        return $this->belongsTo('App\Model\Menu\Satuan', 'satuan_id');
     }
 }

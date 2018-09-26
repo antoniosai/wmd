@@ -15,7 +15,7 @@ class CreateBahanBakusTable extends Migration
     {
         Schema::create('bahan_baku', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
+            $table->string('nama');
             // $table->integer()
             $table->integer('satuan_id')->unsigned();
         });

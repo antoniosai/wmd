@@ -1,4 +1,4 @@
-
+@php $info = App\Info\Restaurant::first(); @endphp
 <!DOCTYPE html>
 <html>
 
@@ -8,7 +8,7 @@
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <link rel="shortcut icon" type="image/x-icon" href="https://dreamguys.co.in/preadmin/orange/assets/img/favicon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('images/logo2.png') }}">
     <title>@yield('title')</title>
     <link href="https://fonts.googleapis.com/css?family=Fira+Sans:400,500,600,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -34,12 +34,12 @@
     @yield('css')
 </head>
 
-<body>
+<body onload="loadSound()">
     <div class="main-wrapper">
         <div class="header">
             <div class="header-left">
                 <a href="index.html" class="logo">
-                    <img src="https://dreamguys.co.in/preadmin/orange/assets/img/logo.png" width="40" height="40" alt="">
+                    <img src="{{ asset($info->foto) }}" width="40" height="40" alt="">
                 </a>
             </div>
             <div class="page-title-box pull-left">
@@ -47,7 +47,7 @@
             </div>
             <a id="mobile_btn" class="mobile_btn pull-left" href="#sidebar"><i class="fa fa-bars" aria-hidden="true"></i></a>
             <ul class="nav user-menu pull-right">
-                <li class="nav-item dropdown d-none d-sm-block">
+                {{-- <li class="nav-item dropdown d-none d-sm-block">
                     <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown"><i class="fa fa-bell-o"></i> <span class="badge badge-pill bg-primary pull-right">3</span></a>
                     <div class="dropdown-menu notifications">
                         <div class="topnav-dropdown-header">
@@ -121,19 +121,19 @@
                 </li>
                 <li class="nav-item dropdown d-none d-sm-block">
                     <a href="javascript:void(0);" id="open_msg_box" class="hasnotifications nav-link"><i class="fa fa-comment-o"></i> <span class="badge badge-pill bg-primary pull-right">8</span></a>
-                </li>
+                </li> --}}
                 <li class="nav-item dropdown has-arrow">
                     <a href="#" class="dropdown-toggle nav-link user-link" data-toggle="dropdown">
                         <span class="user-img">
-							<img class="rounded-circle" src="https://dreamguys.co.in/preadmin/orange/assets/img/user.jpg" width="40" alt="Admin">
+							<img class="rounded-circle" src="{{ asset('images/admin.png') }}" width="40" alt="Admin">
 							<span class="status online"></span>
 						</span>
-						<span>Admin</span>
+						<span>{{ Auth::user()->name }}</span>
                     </a>
 					<div class="dropdown-menu">
-						<a class="dropdown-item" href="profile.html">My Profile</a>
-						<a class="dropdown-item" href="edit-profile.html">Edit Profile</a>
-                        <a class="dropdown-item" href="settings.html">Settings</a>
+						<a class="dropdown-item" href="profile.html">Profil Saya</a>
+						{{-- <a class="dropdown-item" href="edit-profile.html">Edit Profile</a> --}}
+                        {{-- <a class="dropdown-item" href="settings.html">Settings</a> --}}
                         <a class="dropdown-item" href="{{ route('logout') }}"
                             onclick="event.preventDefault();
                                             document.getElementById('logout-form').submit();">
@@ -171,6 +171,10 @@
         </div>
         <div class="page-wrapper">
             <div class="content container-fluid">
+                @include('partials.alert')
+                @include('partials.warning')
+                @include('partials.validation')
+
                 @yield('content')
                 
                 {{-- <div class="themes">
@@ -399,6 +403,12 @@
         </div>
     </div>
     <div class="sidebar-overlay" data-reff=""></div>
+
+    <audio id="audio">
+    <source src="/audio/bells.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+    </audio>
+
     <script type="text/javascript" src="https://dreamguys.co.in/preadmin/orange/assets/js/jquery-3.2.1.min.js"></script>
 	<script type="text/javascript" src="https://dreamguys.co.in/preadmin/orange/assets/js/popper.min.js"></script>
     <script type="text/javascript" src="https://dreamguys.co.in/preadmin/orange/assets/js/bootstrap.min.js"></script>
@@ -414,8 +424,35 @@
     <script type="text/javascript" src="https://dreamguys.co.in/preadmin/orange/assets/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="https://dreamguys.co.in/preadmin/orange/assets/js/dataTables.bootstrap4.min.js"></script>
 
+    <script src="{{ asset('js/axios.min.js') }}"></script>
+    <script src="{{ asset('js/howler.min.js') }}"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+
+    <script src="https://code.createjs.com/soundjs-0.6.2.min.js"></script>
+    <script>
+      var soundID = "Thunder";
+
+      function loadSound () {
+        createjs.Sound.registerSound("/audio/bells.mp3", soundID);
+      }
+
+      function playSound () {
+        createjs.Sound.play(soundID);
+      }
+    </script>
+    <script>
+        function play_audio()
+        {
+            // alert('test howler');
+
+            // playSound();
+            var audio = document.getElementById("audio"); 
+            audio.play();
+        }
+    </script>
 
     <script>
     $.ajaxSetup({

@@ -9,6 +9,7 @@ Edit Menu {{ $menu->nama }}
 <hr>
 <form action="{{ route('admin.menu.update') }}" method="POST" enctype="multipart/form-data">
     {{ csrf_field() }}
+    <input type="hidden" name="id" value="{{ $menu->id }}">
     <div class="row">
         <div class="col-sm-8 col-xs-12">
             <div class="form-group">

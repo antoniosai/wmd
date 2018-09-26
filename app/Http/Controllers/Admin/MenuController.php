@@ -23,23 +23,13 @@ class MenuController extends Controller
 
     public function data()
     {
-        $query = Menu::select('menu.*')->with('kategori')->distinct();;
+        $query = Menu::select('menu.*')->with('kategori')->distinct();
 
         return DataTables::eloquent($query)
-        ->addColumn('tagname', function (Menu $menu) {
-            return $menu->bahan_baku->pluck('name')->implode(', ');
-        })
         ->addColumn('action', function(Menu $menu){
             return "
-            <div class='dropdown'>
-                <button class='btn btn-secondary btn-sm dropdown-toggle' type='button' id='dropdownMenuButton' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
-                    Aksi
-                </button>
-                <div class='dropdown-menu' aria-labelledby='dropdownMenuButton'>
-                    <a href='/auth/menu/edit/".$menu->id."' class='dropdown-item'>Edit</a> 
-                    <a href='javascript:void(0);' onclick='delete_menu(".$menu->id.");' class='dropdown-item'>Hapus</a>
-                </div>
-            </div>
+            <a href='/auth/menu/edit/".$menu->id."' class='btn btn-sm btn-warning'><i class='fa fa-pencil'></i></a> 
+            <a href='javascript:void(0);' onclick='delete_menu(".$menu->id.");' class='btn btn-sm btn-warning'><i class='fa fa-trash'></i></a>
             ";
         })
         ->editColumn('foto', function(Menu $menu){
@@ -70,45 +60,64 @@ class MenuController extends Controller
         ]);
     }
 
+    public function add()
+    {
+        return view('admin.menu.add');
+    }
+
     public function save(Request $request)
     {
-        $menu = Menu::findOrFail($id);
-        
+        $menu = new Menu;
+        $menu->kategori_id = $request->kategori_id;
+        $menu->nama = $request->nama;
+        $menu->harga = $request->harga;
+
+        if ($request->hasFile('file')) {
+
+            File::delete($menu->foto);
+
+            $file = $request->file('file');
+
+            $destinationPath = 'images/menu';
+            $filename = rand(000,999).'-'.$file->getClientOriginalName();
+            $menu->foto = $destinationPath.'/'.$filename;
+
+            $file->move($destinationPath, $filename);
+        }
 
         if($menu->save())
         {
-            $data = [
-                'status' => 'success',
-                'message' => 'Berhasil menghapus Menu'
-            ];
+            $request->session()->flash('alert-success', 'Berhasil mengupdate Menu '.$menu->nama);
+            return redirect()->route('admin.menu.index');
 
-            return response()->json($data);
         }
     }
 
     public function update(Request $request)
     {
+        // return $request->all();
         $id = $request->id;
 
         $menu = Menu::findOrFail($id);
 
         if ($request->hasFile('file')) {
+
+            File::delete($menu->foto);
+
             $file = $request->file('file');
 
-            $menu->foto = $file->getClientOriginalName();
+            $destinationPath = 'images/menu';
+            $filename = $id.'-'.$file->getClientOriginalName();
+            $menu->foto = $destinationPath.'/'.$filename;
 
-            $destinationPath = 'uploads/pdf';
-            $file->move($destinationPath,$file->getClientOriginalName());
+            $file->move($destinationPath, $filename);
         }
 
         if($menu->save())
         {
-            $data = [
-                'status' => 'success',
-                'message' => 'Berhasil menghapus Menu'
-            ];
+            $request->session()->flash('alert-success', 'Berhasil mengupdate Menu '.$menu->nama);
+            return redirect()->route('admin.menu.index');
 
-            return response()->json($data);
         }
     }
 
