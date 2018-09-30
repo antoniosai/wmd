@@ -31,6 +31,64 @@ Manajemen Bahan Baku
         </div>
     </div>
 </div>
+
+<!-- Modal Tambah Stok -->
+<!-- Modal -->
+<div id="modal_add_stock" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="judul_bahan_baku"></h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" id="form_add_stok">
+                    {{ csrf_field() }}
+                    <input type="hidden" name="bahan_baku_id" id="bahan_baku_id">
+                    <div class="form-group">
+                        <label for="nama" id="nama"></label>
+                        <input type="text" class="form-control" name="nama" disabled id="nama_bahan_baku">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Stok Awal</label>
+                                <input type="number" class="form-control" id="old_stok" disabled>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Penambahan Stok *)</label>
+                                <input type="number" class="form-control" name="stok_baru" required>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="harga">Pengeluaran *)</label>
+                
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="validationTooltipUsernamePrepend">Rp</span>
+                                    </div>
+                                    <input type="number" class="form-control" name="harga" value="{{ old('harga') }}" required>
+                                    <div class="invalid-tooltip">
+                                        Please choose a unique and valid username.
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <button class="btn btn-block" onclick="adding_stock()">Selesai Tambah Stok</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- End of Modal -->
 @endsection
 
 @section('js')
@@ -55,6 +113,24 @@ var table = "";
 $(function() {
    
 });
+
+function add_stok(menu_id)
+{
+    axios.get('bahan_baku/show_single_data/'+menu_id)
+    .then(function (response) {
+        // handle success
+        var data = response.data;
+        var title = 'Penambahan Stok ';
+
+        $('#nama').html('Nama Bahan Baku');
+        $('#judul_bahan_baku').html(title+data.nama);
+        $('#bahan_baku_id').val(data.id);
+        $('#old_stok').val(data.stok);
+        $('#nama_bahan_baku').val(data.nama);
+        console.log(data.id);
+        $('#modal_add_stock').modal('show');
+    })
+}
 
 //Fungsi Delete Bahan Baku
 function delete_menu(id) {

@@ -39,7 +39,7 @@ Formulir Tambah User
                     <label>Pilih Role *)</label>
                     <select name="role_id" class="form-control" required>
                         @foreach(Spatie\Permission\Models\Role::all() as $role)
-                        <option value="{{ $role->id }}">{{ $role->name }}</option>
+                        <option value="{{ $role->id }}">{{ ucfirst($role->name) }}</option>
                         @endforeach
                     </select>
                 </div>

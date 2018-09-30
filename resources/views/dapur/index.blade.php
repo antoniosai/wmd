@@ -146,6 +146,8 @@ function kerjakan(order_id)
     });
 }
 
+
+
 //Fungsi Delete Bahan Baku
 function delete_menu(id) {
     console.log(id);

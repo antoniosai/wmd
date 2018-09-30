@@ -43,21 +43,30 @@ Dashboard Admin
 
 @section('js')
 <script>
-
-Morris.Line({
-  element: 'line-example',
-  data: [
-    { y: '2006', a: 100, b: 90 },
-    { y: '2007', a: 75,  b: 65 },
-    { y: '2008', a: 50,  b: 40 },
-    { y: '2009', a: 75,  b: 65 },
-    { y: '2010', a: 50,  b: 40 },
-    { y: '2011', a: 75,  b: 65 },
-    { y: '2012', a: 100, b: 90 }
-  ],
-  xkey: 'y',
-  ykeys: ['a', 'b'],
-  labels: ['Series A', 'Series B']
+    ///auth/data_graf
+var data_graf1 = [
+    { y: '2006-11-11', a: 565000},
+    { y: '2007-11-11', a: 780000},
+    { y: '2008-11-11', a: 630000},
+    { y: '2009-11-11', a: 900000},
+    { y: '2010-11-11', a: 600000},
+    { y: '2011-11-11', a: 131000},
+    { y: '2012-11-11', a: 420000},
+  ];
+var data_graf = [];
+$.getJSON('/auth/data_graf', function(data) {
+    Morris.Line({
+        element: 'line-example',
+        data: data,
+        xkey: 'y',
+        ykeys: 'a',
+        labels: ['Rp'],
+    pointSize: 2,
+    hideHover: 'auto'
+    });
 });
+
+
+
 </script>
 @endsection

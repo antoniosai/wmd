@@ -44,9 +44,9 @@ Manajemen Bahan Baku
                 
                 <table class="table">
                     <tr>
-                        <td>No Meja</td>
+                        <td>Kode Order</td>
                         <td>:</td>
-                        <td>{{ $data->no_nota }}</td>
+                        <td>#{{ $data->no_nota }}</td>
                     </tr>
                     <tr>
                         <td>Pengunjung</td>
@@ -57,13 +57,13 @@ Manajemen Bahan Baku
                     <tr>
                         <td>Nomor Meja</td>
                         <td>:</td>
-                        <td>{{ $data->meja_id }}</td>
+                        <td>{{ $data->meja->no_meja }}</td>
                     </tr>
 
                     <tr>
                         <td>Jam Order</td>
                         <td>:</td>
-                        <td>{{ $data->created_at->format('d M Y') }}</td>
+                        <td>{{ $data->created_at->format('d M Y H:i:s') }}</td>
                     </tr>
                 </table>
             </div>

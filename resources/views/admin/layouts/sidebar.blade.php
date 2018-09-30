@@ -38,13 +38,7 @@
 
     @can('kepegawaian')
     <li @if(Request::segment(2) == 'kepegawaian') class="active" @endif>
-        <a href="{{ route('admin.kepegawaian.index') }}"><i class="fa fa-address-card" aria-hidden="true"></i> Kepegawaian</a>
-    </li>
-    @endcan
-
-    @can('pengunjung')
-    <li @if(Request::segment(2) == 'pengunjung') class="active" @endif>
-        <a href="tasks.html"><i class="fa fa-tasks" aria-hidden="true"></i> Pengunjung</a>
+        <a href="{{ route('admin.kepegawaian.index') }}"><i class="fa fa-address-card" aria-hidden="true"></i> Manajemen User</a>
     </li>
     @endcan
 

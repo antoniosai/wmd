@@ -229,10 +229,10 @@ Point of Sales
             meja_id: meja_id
         })
         .then(function (res) {
-            toastr.success('Berhasil');
-            console.log(res.data);
+            // toastr.success('Berhasil');
+            // console.log(res.data);
 
-            // window.location.replace('/auth/kasir/');
+            window.location.replace('/auth/kasir/');
 
 
 

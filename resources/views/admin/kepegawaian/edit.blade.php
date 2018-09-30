@@ -25,7 +25,7 @@ Formulir Edit User {{ $data->name }}
                     <label>Pilih Role *)</label>
                     <select name="role_id" class="form-control" required>
                         @foreach(Spatie\Permission\Models\Role::all() as $role)
-                        <option value="{{ $role->id }}" @if($data->roles->first()->id == $role->id) selected @endif >{{ $role->name }}</option>
+                        <option value="{{ $role->id }}" @if($data->roles->first()->id == $role->id) selected @endif >{{ ucfirst($role->name) }}</option>
                         @endforeach
                     </select>
                 </div>

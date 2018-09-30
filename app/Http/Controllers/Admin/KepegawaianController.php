@@ -76,7 +76,7 @@ class KepegawaianController extends Controller
 
         $user = new User;
         $user->name = $request->name;
-        $user->username = $request->name;
+        $user->username = $request->username;
         $user->email = $request->email;
         $user->tempat_lahir = $request->tempat_lahir;
         $user->tanggal_lahir = $request->tanggal_lahir;

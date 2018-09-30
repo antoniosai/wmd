@@ -43,7 +43,17 @@ class KasirController extends Controller
         ->addColumn('tanggal', function(OrderTemp $order){
             return $order->created_at->format('d M Y H:i:s');
         })
+        ->addColumn('meja', function(OrderTemp $order){
+            return $order->meja->no_meja;
+        })
         ->editColumn('status', function(OrderTemp $order){
+
+            if ($order->status == 'selesai')
+            {
+                $button = '';
+                $button .= '<label class="badge badge-md badge-success">'. ucfirst($order->status) . " " .$order->updated_at->format('H:i:s') .'</label>';
+                return $button;
+            }
             return '<label class="badge badge-sm badge-danger">'. ucfirst($order->status) .'</label>';
         })
         ->editColumn('total', function(OrderTemp $order){
@@ -53,9 +63,14 @@ class KasirController extends Controller
             return count($order->detail);
         })
         ->addColumn('action', function(OrderTemp $order){
-            $button = '';
-            $button .= '<a href="#" class="btn btn-sm btn-success">Selesai</a>';
-            return $button;
+            
+            if($order->status == 'disajikan')
+            {
+                $button = '';
+                $button .= "<a href='#' class='btn btn-sm btn-success' onclick='ready_to_pay(".$order->id.")'>Selesai</a>";
+                return $button;
+            }
+
         })
         ->rawColumns(['total', 'status', 'action'])->make('true');
 
@@ -93,6 +108,20 @@ class KasirController extends Controller
     public function delete_menu(Request $request)
     {
 
+    }
+
+    public function ready_to_pay($order_id)
+    {
+        $order = OrderTemp::findOrFail($order_id);
+        $order->status = 'selesai';
+
+        if($order->save())
+        {
+            $data = [
+                'message' => 'Berhasil menyelesaikan Order ID'. $order->id
+            ];
+            return response()->json($data);
+        }
     }
 
     public function finish_order(Request $request)

@@ -29,9 +29,17 @@ class BahanBakuController extends Controller
             return "
             <a href='/auth/bahan_baku/edit/".$bahan->id."' class='btn btn-sm btn-warning'><i class='fa fa-pencil'></i></a> 
             <a href='javascript:void(0);' onclick='delete_bahan_baku(".$bahan->id.");' class='btn btn-sm btn-warning'><i class='fa fa-trash'></i></a>
+            <a href='javascript:void(0);' onclick='add_stok(".$bahan->id.");' class='btn btn-sm btn-warning'><i class='fa fa-plus'></i> Tambah Stok</a>
             ";
         })
         ->rawColumns(['action'])->make(true);
+    }
+
+    public function show_single_data($id)
+    {
+        $data = BahanBaku::findOrFail($id);
+
+        return $data;
     }
 
     public function detail($id)

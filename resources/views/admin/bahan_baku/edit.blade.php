@@ -39,6 +39,7 @@ Formulir Edit Bahan Baku {{ $data->nama }}
                     <li>Form isian dengan tanda *) adalah wajib diisi</li>
                     <li>Mohon isi data dengan bijak</li>
                     <li>Jika sudah klik tombol Simpan di bawah ini</li>
+                    <li>Apabila Anda ingin mengganti Stok Bahan Baku, silahkan gunakan fitur Tambah/Kurang Stok</li>
                 </ul>
             </div>
 

@@ -11,23 +11,23 @@
 |
 */
 
-
-
 Route::get('/', function () {
     // return view('welcome');
     return view('auth.login');
 });
 
-
-
 Route::group(['prefix' => 'auth', 'middleware' => 'auth'], function(){
     Route::get('dashboard', 'Admin\DashboardController@index')->name('admin.dashboard');
+
+    Route::get('data_graf', 'Admin\DashboardController@data_graf')->name('admin.data_graf');
     Route::post('data_dashboard', 'Admin\DashboardController@data');
 
 
     Route::group(['prefix' => 'kasir'], function(){
         Route::get('/', 'KasirController@index')->name('kasir.index');
         Route::get('data', 'KasirController@data')->name('kasir.data');
+
+        Route::get('ready_to_pay/{order_id}', 'KasirController@ready_to_pay')->name('ready_to_pay');
 
         Route::get('create_pos', 'KasirController@pos')->name('kasir.create_pos');
 
@@ -71,6 +71,8 @@ Route::group(['prefix' => 'auth', 'middleware' => 'auth'], function(){
         Route::get('/', 'Admin\BahanBakuController@index')->name('admin.bahan_baku.index');
         Route::get('data', 'Admin\BahanBakuController@data')->name('admin.bahan_baku.data');
 
+        Route::get('show_single_data/{id}', 'Admin\BahanBakuController@show_single_data')->name('admin.bahan_baku.show_single_data');
+
         Route::get('detail/{id}', 'Admin\BahanBakuController@detail')->name('admin.bahan_baku.detail');
 
         Route::get('add', 'Admin\BahanBakuController@add')->name('admin.bahan_baku.add');
@@ -97,6 +99,21 @@ Route::group(['prefix' => 'auth', 'middleware' => 'auth'], function(){
 
         Route::get('delete_image/{id}', 'Admin\MenuController@delete_image')->name('admin.menu.delete_image');
         Route::get('delete/{id}', 'Admin\MenuController@delete')->name('admin.menu.delete');
+    });
+
+    Route::group(['prefix' => 'report'], function(){
+        Route::group(['prefix' => 'laba_rugi'], function(){
+            Route::get('/', 'Report\LabaRugiController@index');
+        });
+
+        Route::group(['prefix' => 'bahan_baku'], function(){
+            Route::get('/', 'Report\BahanBakuController@index');
+        });
+
+        Route::group(['prefix' => 'penjualan'], function(){
+            Route::get('/', 'Report\PenjualanController@index');
+        });
+
     });
 });
 

@@ -24,7 +24,6 @@ Manajemen Menu
                             <th style="width: 15%">Kategori</th>
                             <th style="width: 15%">Nama Menu</th>
                             <th style="width: 10%">Harga</th>
-                            <th style="width: 13%">Penjualan Hari Ini</th>
                             <th style="width: 8%">Aksi</th>
                         </tr>
                     </thead>
@@ -46,7 +45,6 @@ var data_menu =  $('#data-menu').DataTable({
         { data: 'foto', name: 'foto', orderable: false, searchable:false },
         { data: 'kategori.nama', name: 'kategori.nama', orderable: false, searchable:false },
         { data: 'nama', name: 'nama' },
-        { data: 'harga', name: 'harga' },
         { data: 'harga', name: 'harga' },
         { data: 'action', name: 'action', orderable: false, searchable:false }
     ]
