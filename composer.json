@@ -10,7 +10,6 @@
         "laravel/framework": "5.7.*",
         "laravel/passport": "^7.0",
         "laravel/tinker": "^1.0",
-        "pusher/pusher-php-server": "^3.2",
         "spatie/laravel-permission": "^2.18",
         "yajra/laravel-datatables-oracle": "~8.0"
     },
