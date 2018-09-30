@@ -12,18 +12,18 @@
     <title>@yield('title')</title>
     <link href="https://fonts.googleapis.com/css?family=Fira+Sans:400,500,600,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin/css/bootstrap.min.css') }}">
     <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.css">
-    <link rel="stylesheet" type="text/css" href="https://dreamguys.co.in/preadmin/orange/assets/css/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" type="text/css" href="https://dreamguys.co.in/preadmin/orange/assets/css/select2.min.css">
-    <link rel="stylesheet" type="text/css" href="https://dreamguys.co.in/preadmin/orange/assets/css/bootstrap-datetimepicker.min.css">
-    <link rel="stylesheet" type="text/css" href="https://dreamguys.co.in/preadmin/orange/assets/plugins/morris/morris.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin/css/fullcalendar.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin/css/dataTables.bootstrap4.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin/css/select2.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin/css/bootstrap-datetimepicker.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin/css/morris.css') }}">
 
 
-    <link rel="stylesheet" type="text/css" href="https://dreamguys.co.in/preadmin/orange/assets/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin/css/dataTables.bootstrap4.min.css') }}">
 
-    <link rel="stylesheet" type="text/css" href="https://dreamguys.co.in/preadmin/orange/assets/css/style.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin/css/style.css') }}">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">

@@ -10,9 +10,9 @@
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('images/logo2.png') }}">
     <title>Login Si Dori</title>
     <link href="https://fonts.googleapis.com/css?family=Fira+Sans:400,500,600,700" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="https://dreamguys.co.in/preadmin/orange/assets/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="https://dreamguys.co.in/preadmin/orange/assets/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="https://dreamguys.co.in/preadmin/orange/assets/css/style.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin/css/font-awesome.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin/css/style.css') }}">
     <!--[if lt IE 9]>
 		<script src="https://dreamguys.co.in/preadmin/orange/assets/js/html5shiv.min.js"></script>
 		<script src="https://dreamguys.co.in/preadmin/orange/assets/js/respond.min.js"></script>

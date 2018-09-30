@@ -13,7 +13,7 @@ use DB;
 use Auth;
 
 class KasirController extends Controller
-{
+{   
     public function index()
     {
         $data = [
