@@ -34,6 +34,15 @@ class KasirController extends Controller
         return view('kasir.pos', $data);
     }
 
+    public function pos_detail($order)
+    {
+        $data = [
+            'no_nota' => $order
+        ];
+
+        return view('kasir.pos', $data);
+    }
+
     public function data()
     {
         $query = OrderTemp::query()->where('no_nota', '!=', 'test')->whereDate('created_at', date('Y-m-d'))->orderBy('created_at', 'desc');
@@ -41,7 +50,7 @@ class KasirController extends Controller
 
         return $data = DataTables::eloquent($query)
         ->addColumn('tanggal', function(OrderTemp $order){
-            return $order->created_at->format('d M Y H:i:s');
+            return $order->created_at->format('H:i:s');
         })
         ->addColumn('meja', function(OrderTemp $order){
             return $order->meja->no_meja;
@@ -68,6 +77,12 @@ class KasirController extends Controller
             {
                 $button = '';
                 $button .= "<a href='#' class='btn btn-sm btn-success' onclick='ready_to_pay(".$order->id.")'>Selesai</a>";
+                return $button;
+            } else if ($order->status == 'diajukan')
+            {
+                $button = '';
+                $button .= "<a href='/auth/kasir/create_pos/detail/".$order->no_nota."'><label class='badge badge-sm badge-success'>". "Tambah Order" ."</label></a>";
+                $button .= "&nbsp;<a href='#' class='btn btn-sm btn-info' onclick='ready_to_pay(".$order->id.")'>Selesai</a>";
                 return $button;
             }
 

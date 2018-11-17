@@ -19,15 +19,15 @@
 	<![endif]-->
 </head>
 
-<body>
+<body background="{{ asset('/images/bg.png') }}">
     <div class="main-wrapper">
         <div class="account-page">
             <div class="container">
-                <h3 class="account-title">Login Si Dori</h3>
+                <h3 class="account-title" style="color:white">Login C'Dori</h3>
                 <div class="account-box">
                     <div class="account-wrapper">
                         <div class="account-logo">
-                            <a href="index.html"><img src="{{ asset('images/logo2.png') }}" alt="Preadmin"></a>
+                            <a href="index.html"><img src="{{ asset('images/logo.jpg') }}" alt="Preadmin"></a>
                         </div>
                         <form action="{{ route('login') }}" method="POST">
                             {{ csrf_field() }}

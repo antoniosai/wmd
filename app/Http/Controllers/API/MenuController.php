@@ -82,7 +82,7 @@ class MenuController extends Controller
                 
             if($order->save())
             {
-                $order_temp->total = $order_temp->total + $order->subtotal;
+                $order_temp->total = $order_temp->detail->sum('subtotal');;
                 $order_temp->save();
 
                 $data = [
@@ -113,6 +113,10 @@ class MenuController extends Controller
         $order->qty = $order->qty + 1;
         $order->subtotal = $order->subtotal + $menu->harga;
         $order->save();
+
+        $data = OrderTemp::findOrFail($order_where_clause['order_temp_id']);
+        $data->total = $data->detail->sum('subtotal');
+        $data->save();
 
         // $this->sum_order($order_temp_id);
 
@@ -146,6 +150,8 @@ class MenuController extends Controller
         }
 
         $data = OrderTemp::findOrFail($order_temp_id);
+        $data->total = $data->detail->sum('subtotal');
+        $data->save();
 
         // $this->sum_order($order_temp_id);
 
@@ -156,7 +162,29 @@ class MenuController extends Controller
 
     public function delete_item(Request $request)
     {
-        return $request->all();
+        $order_temp_id = $request->order_temp_id;
+        $menu_id = $request->menu_id;
+        
+        $order_where_clause = [
+            'order_temp_id' => $order_temp_id,
+            'menu_id' => $menu_id
+        ];
+
+        $order = Order::where($order_where_clause)->first();
+
+        if($order->delete())
+        {
+            
+            $data = OrderTemp::findOrFail($order_temp_id);
+            $data->total = $data->detail->sum('subtotal');
+            $data->save();
+            
+            // $this->sum_order($order_temp_id);
+            
+            return view('kasir.order_list', [
+                'order_list' => $order->order_temp->detail
+            ]);
+        }
     }
 
     public function order_list($no_nota)
@@ -166,6 +194,7 @@ class MenuController extends Controller
         ];
 
         // return OrderTemp::all();
+        // return $order = OrderTemp::findOrFail($no_nota);
         $order = OrderTemp::where('no_nota', $no_nota)->first();
 
         if(!$order)
@@ -178,7 +207,7 @@ class MenuController extends Controller
         }
 
         return view('kasir.order_list', [
-            'order_list' => $order
+            'order_list' => $order->detail
         ]);
     }
 

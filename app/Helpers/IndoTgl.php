@@ -48,4 +48,72 @@ class IndoTgl
             return $tanggal.' '.IndoTgl::bulanIndo($bulan).' '.$tahun;
         }
     }
+
+    public static function generateMonth()
+    {
+        $data = [
+            [
+                'no' => 1,
+                'string' => 'Januari'
+            ],
+            [
+                'no' => 2,
+                'string' => 'Februari'
+            ],
+            [
+                'no' => 3,
+                'string' => 'Maret'
+            ],
+            [
+                'no' => 4,
+                'string' => 'April'
+            ],
+            [
+                'no' => 5,
+                'string' => 'Mei'
+            ],
+            [
+                'no' => 6,
+                'string' => 'Juni'
+            ],
+            [
+                'no' => 7,
+                'string' => 'Juli'
+            ],
+            [
+                'no' => 8,
+                'string' => 'Agustus'
+            ],
+            [
+                'no' => 9,
+                'string' => 'September'
+            ],
+            [
+                'no' => 10,
+                'string' => 'Oktober'
+            ],
+            [
+                'no' => 11,
+                'string' => 'November'
+            ],
+            [
+                'no' => 12,
+                'string' => 'Desember'
+            ]
+        ];
+
+        return $data;
+    }
+
+    public static function generateYear()
+    {
+        $data = [];
+
+        for($i = 2015; $i <= date('Y'); $i++)
+        {
+            array_push($data, $i);
+        }
+
+        return $data;
+    }
 }

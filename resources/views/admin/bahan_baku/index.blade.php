@@ -20,10 +20,10 @@ Manajemen Bahan Baku
                 <table class="table table-stripped" id="data-menu">
                     <thead>
                         <tr>
-                            <th style="width: 15%">Nama Bahan</th>
-                            <th style="width: 10%">Stok</th>
-                            <th style="width: 13%">Satuan</th>
-                            <th style="width: 8%">Aksi</th>
+                            <th>Nama Bahan</th>
+                            <th>Stok</th>
+                            <th>Satuan</th>
+                            <th></th>
                         </tr>
                     </thead>
                 </table>
@@ -61,7 +61,19 @@ Manajemen Bahan Baku
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="">Penambahan Stok *)</label>
-                                <input type="number" class="form-control" name="stok_baru" required>
+                
+                                <div class="input-group">
+                                    <input type="number" class="form-control" name="stok_baru" id="new_stock" required>
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text satuan_bahan" id="validationTooltipUsernamePrepend"></span>
+                                    </div>
+                                    <div class="invalid-tooltip">
+                                        Please choose a unique and valid username.
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <div class="form-group">
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -72,14 +84,71 @@ Manajemen Bahan Baku
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="validationTooltipUsernamePrepend">Rp</span>
                                     </div>
-                                    <input type="number" class="form-control" name="harga" value="{{ old('harga') }}" required>
+                                    <input type="number" class="form-control" name="harga" id="harga" value="{{ old('harga') }}" required>
                                     <div class="invalid-tooltip">
                                         Please choose a unique and valid username.
                                     </div>
                                 </div>
                                 
                             </div>
-                            <button class="btn btn-block" onclick="adding_stock()">Selesai Tambah Stok</button>
+                            <button class="btn btn-block">Selesai Tambah Stok</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- End of Modal -->
+
+<!-- Modal -->
+<div id="modal_reduce_stock" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="judul_bahan_baku-reduce"></h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" id="form_reduce_stok">
+                    {{ csrf_field() }}
+                    <input type="hidden" name="bahan_baku_id" id="bahan_baku_id-reduce">
+                    <div class="form-group">
+                        <label for="nama" id="nama"></label>
+                        <input type="text" class="form-control" name="nama" disabled id="nama_bahan_baku-reduce">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Stok Awal</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="old_stok-reduce" disabled>
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text satuan_bahan" id="validationTooltipUsernamePrepend"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Pengurangan Stok *)</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" name="stok_baru" id="stok_baru-reduce" required>
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text satuan_bahan" id="validationTooltipUsernamePrepend"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <textarea name="alasan" id="alasan" cols="30" rows="4" class="form-control" placeholder="Masukan Alasan Pengurangan Barang"></textarea>
+                                
+                            </div>
+                            <button class="btn btn-block">Selesai Mengurangi Stok</button>
                         </div>
                     </div>
                 </form>
@@ -125,6 +194,7 @@ function add_stok(menu_id)
         $('#nama').html('Nama Bahan Baku');
         $('#judul_bahan_baku').html(title+data.nama);
         $('#bahan_baku_id').val(data.id);
+        $('.satuan_bahan').text(data.satuan.nama)
         $('#old_stok').val(data.stok);
         $('#nama_bahan_baku').val(data.nama);
         console.log(data.id);
@@ -132,8 +202,91 @@ function add_stok(menu_id)
     })
 }
 
+
+function reduce_stok(menu_id)
+{
+    axios.get('bahan_baku/show_single_data/'+menu_id)
+    .then(function (response) {
+        // handle success
+        var data = response.data;
+        var title = 'Pengurangan Stok ';
+
+        $('#nama-reduce').html('Nama Bahan Baku');
+        $('#judul_bahan_baku-reduce').html(title+data.nama);
+        $('#bahan_baku_id-reduce').val(data.id);
+        $('#old_stok-reduce').val(data.stok);
+        $('.satuan_bahan').text(data.satuan.nama);
+        $('#nama_bahan_baku-reduce').val(data.nama);
+        console.log(data.id);
+        $('#modal_reduce_stock').modal('show');
+    })
+}
+
+$("#form_add_stok").on('submit', function(event){
+    event.preventDefault();
+    
+    axios({
+        method: 'post',
+        url: '/auth/bahan_baku/add_stock',
+        data: $( this ).serialize()
+    })
+    .then(function (response) {
+        console.log(response.data);
+        if (response.data.status == 'success')
+        {
+            $('#new_stock').val('');
+            $('#harga').val('');
+            $('#modal_add_stock').modal('hide');
+
+            toastr.success(response.data.message)
+            data_menu.ajax.reload();
+        }
+    })
+    .catch(function(err){
+        console.log(err)
+    });
+
+});
+
+$( "#form_reduce_stok" ).on( "submit", function( event ) {
+  event.preventDefault();
+  console.log( $( this ).serialize() );
+
+    axios({
+        method: 'post',
+        url: '/auth/bahan_baku/reduce_stock',
+        data: $( this ).serialize()
+    })
+    .then(function (response) {
+        console.log(response.data);
+        if(response.data.status == 'error')
+        {
+            toastr.warning(response.data.message)
+            data_menu.ajax.reload();
+
+            $('#modal_reduce_stock').modal('hide');
+
+        }
+        else if (response.data.status == 'success')
+        {
+            $('#bahan_baku_id-reduce').val('');
+            $('#stok_baru-reduce').val('');
+            $('#alasan').val('');
+            $('#modal_reduce_stock').modal('hide');
+
+            toastr.success(response.data.message)
+            data_menu.ajax.reload();
+        }
+    })
+    .catch(function(err){
+        console.log(err)
+    });
+});
+
+
+
 //Fungsi Delete Bahan Baku
-function delete_menu(id) {
+function delete_bahan_baku(id) {
     console.log(id);
     swal({
         title: "Apakah Anda yakin?",

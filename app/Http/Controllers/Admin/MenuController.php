@@ -9,6 +9,8 @@ use DataTables;
 use File;
 use App\Model\Menu\Menu;
 
+use App\Model\Menu\Bahan;
+
 class MenuController extends Controller
 {
     public function index()
@@ -119,6 +121,58 @@ class MenuController extends Controller
             return redirect()->route('admin.menu.index');
 
         }
+    }
+
+    public function get_bahan_baku($menu_id)
+    {
+        $data = Bahan::where('menu_id', $menu_id)->get();
+
+        $view = view('menu.daftar_bahan_baku', [
+            'data' => $data
+        ]);
+
+        return $view;
+    }
+
+    public function add_bahan_baku(Request $request)
+    {
+        $menu_id = $request->menu_id;
+        $qty = $request->qty;
+        $bahan_id = $request->bahan_id;
+
+        //Validation
+        $whereClause = [
+            'menu_id' => $menu_id,
+            'bahan_baku_id' => $bahan_id
+        ];
+        $data = Bahan::where($whereClause)->first();
+
+        if($data)
+        {
+            $data_json = [
+                'message' => 'Data sudah ada, silahkan Edit',
+                'status' => 'existing'
+            ];
+
+            return response()->json($data_json);
+        }
+        else
+        {
+            $bahan = Bahan::create([
+                'menu_id' => $menu_id,
+                'bahan_baku_id' => $bahan_id, 
+                'qty' => $qty
+            ]);
+            
+
+            $data_json = [
+                'message' => 'Berhasil',
+                'status' => 'new'
+            ];
+
+            return response()->json($data_json);
+        }
+
     }
 
     public function delete_image($id)

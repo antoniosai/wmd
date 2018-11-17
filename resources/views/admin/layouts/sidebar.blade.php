@@ -47,12 +47,12 @@
     <li class="submenu">
         <a href="#"><i class="fa fa-circle-o" aria-hidden="true"></i> <span> Bahan Baku</span> <span class="menu-arrow"></span></a>
         <ul class="list-unstyled" style="display: none;">
-            <li><a href="uikit.html">Laporan Masuk</a></li>
-            <li><a href="typography.html">Laporan Keluar</a></li>
+            <li><a href="{{ route('report.bahan_baku.masuk') }}">Laporan Masuk</a></li>
+            <li><a href="{{ route('report.bahan_baku.keluar') }}">Laporan Keluar</a></li>
         </ul>
     </li>
     <li>
-        <a href="widgets.html"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Penjualan</a>
+        <a href="{{ route('report.penjualan.index') }}"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Penjualan</a>
     </li>
     <li>
         <a href="widgets.html"><i class="fa fa-book" aria-hidden="true"></i> Laba Rugi</a>

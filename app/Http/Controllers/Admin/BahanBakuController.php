@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use DataTables;
 
 use App\Model\Menu\BahanBaku;
+use App\Model\Menu\BahanBakuMasuk;
+use App\Model\Menu\BahanBakuKeluar;
 
 class BahanBakuController extends Controller
 {
@@ -30,6 +32,7 @@ class BahanBakuController extends Controller
             <a href='/auth/bahan_baku/edit/".$bahan->id."' class='btn btn-sm btn-warning'><i class='fa fa-pencil'></i></a> 
             <a href='javascript:void(0);' onclick='delete_bahan_baku(".$bahan->id.");' class='btn btn-sm btn-warning'><i class='fa fa-trash'></i></a>
             <a href='javascript:void(0);' onclick='add_stok(".$bahan->id.");' class='btn btn-sm btn-warning'><i class='fa fa-plus'></i> Tambah Stok</a>
+            <a href='javascript:void(0);' onclick='reduce_stok(".$bahan->id.");' class='btn btn-sm btn-warning'><i class='fa fa-minus'></i> Tambah Pengeluaran</a>
             ";
         })
         ->rawColumns(['action'])->make(true);
@@ -38,6 +41,7 @@ class BahanBakuController extends Controller
     public function show_single_data($id)
     {
         $data = BahanBaku::findOrFail($id);
+        $data->satuan->nama;
 
         return $data;
     }
@@ -94,6 +98,67 @@ class BahanBakuController extends Controller
         {
             $request->session()->flash('alert-success', 'Berhasil menambahkan bahan baku ' . $data->nama);
             return redirect()->route('admin.bahan_baku.index');
+        }
+    }
+
+    public function add_stock(Request $request)
+    {
+        $bahan = BahanBaku::findOrFail($request->bahan_baku_id);
+
+        $bahan->stok = $bahan->stok + $request->stok_baru;
+        if($bahan->save())
+        {
+            $masuk = new BahanBakuMasuk;
+            $masuk->bahan_baku_id = $request->bahan_baku_id;
+            $masuk->stok_masuk = $request->stok_baru;
+            $masuk->pengeluaran = $request->harga;
+
+            if($masuk->save())
+            {
+                $data = [
+                    'status' => 'success',
+                    'message' => 'Berhasil melakukan penambahan stok barang'
+                ];
+    
+                return response()->json($data);
+            }
+        }
+    }
+
+    public function reduce_stock(Request $request)
+    {
+        $bahan = BahanBaku::findOrFail($request->bahan_baku_id);
+
+        if($request->stok_baru > $bahan->stok)
+        {
+            $data = [
+                'status' => 'error',
+                'message' => 'Stok pengurang tidak bisa lebih besar dari Stok yang tersedia'
+            ];
+
+            return response()->json($data);
+        }
+
+        $bahan->stok = $bahan->stok - $request->stok_baru;
+
+        if($bahan->save())
+        {
+
+            
+            $keluar = new BahanBakuKeluar;
+            $keluar->bahan_baku_id = $request->bahan_baku_id;
+            $keluar->qty = $request->stok_baru;
+            $keluar->tranksaksi = $request->alasan;
+            if($keluar->save())
+            {
+                $data = [
+                    'status' => 'success',
+                    'message' => 'Berhasil mengurangi stok'
+                ];
+    
+                return response()->json($data);
+
+            }
         }
     }
 

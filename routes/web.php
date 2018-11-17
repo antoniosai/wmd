@@ -22,6 +22,11 @@ Route::group(['prefix' => 'auth', 'middleware' => 'auth'], function(){
     Route::get('data_graf', 'Admin\DashboardController@data_graf')->name('admin.data_graf');
     Route::post('data_dashboard', 'Admin\DashboardController@data');
 
+    Route::group(['prefix' => 'profile'], function(){
+        Route::get('/', 'ProfileController@index')->name('admin.profile.index');
+        Route::post('save', 'ProfileController@save')->name('admin.profile.save');
+    });
+
 
     Route::group(['prefix' => 'kasir'], function(){
         Route::get('/', 'KasirController@index')->name('kasir.index');
@@ -30,6 +35,7 @@ Route::group(['prefix' => 'auth', 'middleware' => 'auth'], function(){
         Route::get('ready_to_pay/{order_id}', 'KasirController@ready_to_pay')->name('ready_to_pay');
 
         Route::get('create_pos', 'KasirController@pos')->name('kasir.create_pos');
+        Route::get('create_pos/detail/{order_id}', 'KasirController@pos_detail')->name('kasir.create_pos.detail');
 
         Route::post('finish_order', 'KasirController@finish_order')->name('kasir.finish_order');
         
@@ -58,8 +64,6 @@ Route::group(['prefix' => 'auth', 'middleware' => 'auth'], function(){
         Route::post('update', 'Admin\KepegawaianController@update')->name('admin.kepegawaian.update');
         Route::get('delete_image/{id}', 'Admin\KepegawaianController@delete_image')->name('admin.kepegawaian.delete_image');
         Route::get('delete/{id}', 'Admin\KepegawaianController@delete')->name('admin.kepegawaian.delete');
-
-        
     });
 
     Route::group(['prefix' => 'informasi_restaurant'], function(){
@@ -74,6 +78,9 @@ Route::group(['prefix' => 'auth', 'middleware' => 'auth'], function(){
         Route::get('show_single_data/{id}', 'Admin\BahanBakuController@show_single_data')->name('admin.bahan_baku.show_single_data');
 
         Route::get('detail/{id}', 'Admin\BahanBakuController@detail')->name('admin.bahan_baku.detail');
+
+        Route::post('reduce_stock', 'Admin\BahanBakuController@reduce_stock')->name('admin.bahan_baku.reduce_stock');
+        Route::post('add_stock', 'Admin\BahanBakuController@add_stock')->name('admin.bahan_baku.add_stock');
 
         Route::get('add', 'Admin\BahanBakuController@add')->name('admin.bahan_baku.add');
         Route::post('save', 'Admin\BahanBakuController@save')->name('admin.bahan_baku.save');
@@ -94,6 +101,9 @@ Route::group(['prefix' => 'auth', 'middleware' => 'auth'], function(){
         Route::get('edit/{id}', 'Admin\MenuController@edit')->name('admin.menu.edit');
         Route::post('save', 'Admin\MenuController@save')->name('admin.menu.save');
 
+        Route::get('get_bahan_baku/{menu_id}', 'Admin\MenuController@get_bahan_baku')->name('admin.menu.get_bahan_baku');
+        Route::post('add_bahan_baku', 'Admin\MenuController@add_bahan_baku')->name('admin.menu.add_bahan_baku');
+
         Route::get('add', 'Admin\MenuController@add')->name('admin.menu.add');
         Route::post('update', 'Admin\MenuController@update')->name('admin.menu.update');
 
@@ -103,15 +113,16 @@ Route::group(['prefix' => 'auth', 'middleware' => 'auth'], function(){
 
     Route::group(['prefix' => 'report'], function(){
         Route::group(['prefix' => 'laba_rugi'], function(){
-            Route::get('/', 'Report\LabaRugiController@index');
+            Route::get('keluar', 'Report\LabaRugiController@keluar')->name('report.laba_rugi.keluar');
         });
 
         Route::group(['prefix' => 'bahan_baku'], function(){
-            Route::get('/', 'Report\BahanBakuController@index');
+            Route::get('masuk', 'Report\BahanBakuController@masuk')->name('report.bahan_baku.masuk');
+            Route::get('keluar', 'Report\BahanBakuController@keluar')->name('report.bahan_baku.keluar');
         });
 
         Route::group(['prefix' => 'penjualan'], function(){
-            Route::get('/', 'Report\PenjualanController@index');
+            Route::get('/', 'Report\PenjualanController@index')->name('report.penjualan.index');
         });
 
     });

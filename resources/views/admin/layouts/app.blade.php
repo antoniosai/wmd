@@ -131,7 +131,7 @@
 						<span>{{ Auth::user()->name }}</span>
                     </a>
 					<div class="dropdown-menu">
-						<a class="dropdown-item" href="profile.html">Profil Saya</a>
+						<a class="dropdown-item" href="{{ route('admin.profile.index') }}">Profil Saya</a>
 						{{-- <a class="dropdown-item" href="edit-profile.html">Edit Profile</a> --}}
                         {{-- <a class="dropdown-item" href="settings.html">Settings</a> --}}
                         <a class="dropdown-item" href="{{ route('logout') }}"

@@ -26,6 +26,10 @@ Route::group(['prefix' => 'menu'], function(){
     Route::post('delete_item', 'API\MenuController@delete_item');
 });
 
+Route::group(['prefix' => 'bahan_baku'], function(){
+    Route::get('search/{query}', 'API\BahanBakuController@search');
+});
+
 Route::post('login', 'API\UserController@login');
 Route::post('register', 'API\UserController@register');
 
