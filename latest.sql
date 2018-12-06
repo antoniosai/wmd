@@ -7,6 +7,23 @@ SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
 
 SET NAMES utf8mb4;
 
+CREATE DATABASE `wmd` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */;
+USE `wmd`;
+
+DROP TABLE IF EXISTS `aspirasi`;
+CREATE TABLE `aspirasi` (
+  `kode_aspirasi` varchar(6) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `ponsel` varchar(13) NOT NULL,
+  `nama` varchar(255) NOT NULL,
+  `id_kategori` int(2) NOT NULL,
+  `id_masyarakat` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`kode_aspirasi`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+INSERT INTO `aspirasi` (`kode_aspirasi`, `email`, `ponsel`, `nama`, `id_kategori`, `id_masyarakat`) VALUES
+('N5B4Z3',	'admin@mail.com',	'123213',	'TEst',	9,	9);
+
 DROP TABLE IF EXISTS `bahan_baku`;
 CREATE TABLE `bahan_baku` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -19,36 +36,59 @@ CREATE TABLE `bahan_baku` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `bahan_baku` (`id`, `nama`, `stok`, `satuan_id`) VALUES
-(1,	'Ayam',	0,	2),
+(1,	'Ayam',	1212,	2),
 (2,	'Kangkung',	0,	2),
 (4,	'Mie',	0,	2),
-(5,	'Alpukat',	41,	1),
-(6,	'Test',	100,	3);
+(5,	'Alpukat',	4,	1),
+(6,	'Test',	39,	3);
 
 DROP TABLE IF EXISTS `bahan_baku_keluar`;
 CREATE TABLE `bahan_baku_keluar` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `bahan_baku_id` int(10) unsigned NOT NULL,
+  `qty` int(50) NOT NULL DEFAULT '0',
   `tranksaksi` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `FK_bahan_baku_keluar_bahan_baku` (`bahan_baku_id`),
+  CONSTRAINT `FK_bahan_baku_keluar_bahan_baku` FOREIGN KEY (`bahan_baku_id`) REFERENCES `bahan_baku` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+INSERT INTO `bahan_baku_keluar` (`id`, `bahan_baku_id`, `qty`, `tranksaksi`, `created_at`, `updated_at`) VALUES
+(1,	5,	1,	'121',	'2018-10-04 13:13:57',	'2018-10-04 13:13:57'),
+(2,	5,	12,	'12',	'2018-10-04 13:15:32',	'2018-10-04 13:15:32'),
+(3,	5,	23,	'121',	'2018-10-04 13:17:39',	'2018-10-04 13:17:39'),
+(4,	6,	1,	'121',	'2018-10-04 13:19:27',	'2018-10-04 13:19:27'),
+(5,	6,	2,	'121',	'2018-10-04 13:21:17',	'2018-10-04 13:21:17'),
+(6,	6,	2,	'21',	'2018-10-04 13:21:23',	'2018-10-04 13:21:23'),
+(7,	6,	1,	'1',	'2018-10-04 13:22:16',	'2018-10-04 13:22:16'),
+(8,	6,	12,	'12121',	'2018-10-04 13:22:31',	'2018-10-04 13:22:31'),
+(9,	6,	41,	'test',	'2018-10-06 03:49:18',	'2018-10-06 03:49:18');
 
 DROP TABLE IF EXISTS `bahan_baku_masuk`;
 CREATE TABLE `bahan_baku_masuk` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `bahan_baku_id` int(10) unsigned NOT NULL,
+  `stok_masuk` int(10) NOT NULL,
+  `pengeluaran` int(10) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `FK_bahan_baku_masuk_bahan_baku` (`bahan_baku_id`),
+  CONSTRAINT `FK_bahan_baku_masuk_bahan_baku` FOREIGN KEY (`bahan_baku_id`) REFERENCES `bahan_baku` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+INSERT INTO `bahan_baku_masuk` (`id`, `bahan_baku_id`, `stok_masuk`, `pengeluaran`, `created_at`, `updated_at`) VALUES
+(1,	1,	12,	40000,	'2018-10-06 03:59:54',	'2018-10-06 03:59:54'),
+(2,	1,	1200,	4000,	'2018-10-06 04:01:12',	'2018-10-06 04:01:12');
 
 DROP TABLE IF EXISTS `bahan_baku_menu`;
 CREATE TABLE `bahan_baku_menu` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `menu_id` int(10) unsigned NOT NULL,
   `bahan_baku_id` int(10) unsigned NOT NULL,
+  `qty` float DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_bahan_baku_menu_menu` (`menu_id`),
   KEY `FK_bahan_baku_menu_bahan_baku` (`bahan_baku_id`),
@@ -56,6 +96,10 @@ CREATE TABLE `bahan_baku_menu` (
   CONSTRAINT `FK_bahan_baku_menu_menu` FOREIGN KEY (`menu_id`) REFERENCES `menu` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+INSERT INTO `bahan_baku_menu` (`id`, `menu_id`, `bahan_baku_id`, `qty`) VALUES
+(38,	5,	1,	12),
+(39,	5,	5,	12),
+(40,	5,	6,	12);
 
 DROP TABLE IF EXISTS `info_restaurant_pusat`;
 CREATE TABLE `info_restaurant_pusat` (
@@ -71,6 +115,17 @@ CREATE TABLE `info_restaurant_pusat` (
 INSERT INTO `info_restaurant_pusat` (`id`, `nama`, `foto`, `email`, `alamat`, `tentang`) VALUES
 (1,	'Warung Mas Dori',	'/images/logo.jpg',	'wmd@gmail.com',	'Jl. Terusan Pembangunan',	'Konten Tentang');
 
+DROP TABLE IF EXISTS `kategori_aspirasi`;
+CREATE TABLE `kategori_aspirasi` (
+  `id_kategori` int(2) NOT NULL AUTO_INCREMENT,
+  `nama_kategori` varchar(50) NOT NULL,
+  PRIMARY KEY (`id_kategori`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+INSERT INTO `kategori_aspirasi` (`id_kategori`, `nama_kategori`) VALUES
+(9,	'Aspirasi'),
+(12,	'Pengaduan');
+
 DROP TABLE IF EXISTS `kategori_menu`;
 CREATE TABLE `kategori_menu` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -82,6 +137,27 @@ INSERT INTO `kategori_menu` (`id`, `nama`) VALUES
 (1,	'Makanan'),
 (2,	'Minuman'),
 (3,	'Paket');
+
+DROP TABLE IF EXISTS `masyarat`;
+CREATE TABLE `masyarat` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `nama_lengkap` varchar(50) NOT NULL,
+  `email` varchar(50) NOT NULL,
+  `no_telp` varchar(16) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+INSERT INTO `masyarat` (`id`, `nama_lengkap`, `email`, `no_telp`, `password`) VALUES
+(1,	'test',	'test@mail.com',	'0812312312',	'teasdasdsa'),
+(4,	'sadsa',	'asd@mal.com',	'atet',	'dsada'),
+(5,	'User Percobaan',	'coba@mail.com',	'0812141231',	'd41d8cd98f00b204e9800998ecf8427e'),
+(6,	'sdds',	'gh@bg.com',	'gfhh',	'84117275be999ff55a987b9381e01f96'),
+(7,	'rofah',	'ofi@gmail.com',	'087666',	'06ccc6fac98a777fce43a972eaca83df'),
+(8,	'masyarakat',	'masyarakat@mail.com',	'081231231',	'16a1c15f62d4ba2b6abdaa50e97d592f'),
+(9,	'Admin',	'admin@mail.com',	'0812312',	'21232f297a57a5a743894a0e4a801fc3'),
+(10,	'Erika Fauziyah',	'erika@gmail.com',	'0838257777',	'74f5f5fdbc48fe161456b715c903d35e');
 
 DROP TABLE IF EXISTS `meja`;
 CREATE TABLE `meja` (
@@ -295,7 +371,16 @@ CREATE TABLE `order` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `order` (`id`, `menu_id`, `order_temp_id`, `qty`, `subtotal`, `created_at`, `updated_at`) VALUES
-(115,	7,	93,	1,	10000,	'2018-09-30 03:09:37',	'2018-09-30 03:09:37');
+(115,	7,	93,	1,	10000,	'2018-09-30 03:09:37',	'2018-09-30 03:09:37'),
+(116,	7,	94,	100,	1000000,	'2018-09-30 05:56:26',	'2018-09-30 05:56:26'),
+(123,	7,	100,	74,	740000,	'2018-10-13 10:46:45',	'2018-10-13 11:07:26'),
+(124,	6,	100,	1,	8000,	'2018-10-13 10:51:46',	'2018-10-13 10:51:46'),
+(126,	6,	101,	1,	8000,	'2018-10-13 11:08:27',	'2018-10-13 11:08:27'),
+(127,	7,	102,	14,	140000,	'2018-10-13 12:11:04',	'2018-10-13 12:16:58'),
+(128,	6,	102,	12,	96000,	'2018-10-13 12:12:09',	'2018-10-13 12:12:09'),
+(134,	7,	103,	12,	120000,	'2018-10-14 05:00:50',	'2018-10-14 05:00:50'),
+(135,	7,	105,	1,	10000,	'2018-11-19 06:33:32',	'2018-11-19 06:33:32'),
+(136,	6,	105,	2,	16000,	'2018-11-19 06:33:37',	'2018-11-19 06:33:37');
 
 DROP TABLE IF EXISTS `order_temp`;
 CREATE TABLE `order_temp` (
@@ -314,7 +399,14 @@ CREATE TABLE `order_temp` (
 
 INSERT INTO `order_temp` (`id`, `nama_pengunjung`, `no_nota`, `total`, `meja_id`, `status`, `created_at`, `updated_at`) VALUES
 (17,	'Antonio',	'test',	'0',	117,	'diajukan',	'2018-09-14 09:09:05',	'2018-09-14 09:09:05'),
-(93,	'Yalzan',	'WMD-300918',	'10000',	119,	'selesai',	'2018-09-30 03:09:37',	'2018-09-30 03:35:29');
+(93,	'Yalzan',	'WMD-300918',	'10000',	119,	'selesai',	'2018-09-30 03:09:37',	'2018-09-30 03:35:29'),
+(94,	'dede',	'WMD-300994',	'1000000',	127,	'selesai',	'2018-09-30 05:56:26',	'2018-09-30 05:57:18'),
+(100,	'mangga',	'WMD-131095',	'1558000',	117,	'selesai',	'2018-10-13 10:46:44',	'2018-10-13 11:07:51'),
+(101,	'mangga',	'WMD-1310101',	'18000',	131,	'selesai',	'2018-10-13 11:08:09',	'2018-10-13 12:09:54'),
+(102,	'anton',	'WMD-1310102',	'236000',	133,	'diajukan',	'2018-10-13 12:11:04',	'2018-10-13 12:16:58'),
+(103,	'121',	'WMD-1410103',	'120001',	122,	'diajukan',	'2018-10-14 04:45:59',	'2018-10-14 05:01:13'),
+(104,	'Test',	'WMD-1410104',	'0',	126,	'diajukan',	'2018-10-14 04:47:39',	'2018-10-14 04:53:19'),
+(105,	'Abdu',	'WMD-1911105',	'26000',	126,	'diajukan',	'2018-11-19 06:33:31',	'2018-11-19 06:33:51');
 
 DROP TABLE IF EXISTS `password_resets`;
 CREATE TABLE `password_resets` (
@@ -363,6 +455,24 @@ INSERT INTO `permissions` (`id`, `name`, `guard_name`, `created_at`, `updated_at
 (11,	'kepegawaian',	'web',	'2018-09-22 17:25:23',	'2018-09-22 17:25:41'),
 (12,	'pengunjung',	'web',	'2018-09-22 17:25:39',	'2018-09-22 17:25:39'),
 (13,	'laporan',	'web',	'2018-09-22 17:33:49',	'2018-09-22 17:33:49');
+
+DROP TABLE IF EXISTS `pesan_aspirasi`;
+CREATE TABLE `pesan_aspirasi` (
+  `id_pesan` int(4) NOT NULL AUTO_INCREMENT,
+  `kode_aspirasi` varchar(6) NOT NULL,
+  `isi_pesan` text NOT NULL,
+  `tanggal_pesan` datetime NOT NULL,
+  `tipe_pengirim` enum('user','admin') NOT NULL,
+  `status` varchar(35) NOT NULL,
+  `id_masyarakat` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id_pesan`),
+  KEY `kode_aspirasi` (`kode_aspirasi`),
+  CONSTRAINT `pesan_aspirasi_ibfk_1` FOREIGN KEY (`kode_aspirasi`) REFERENCES `aspirasi` (`kode_aspirasi`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+INSERT INTO `pesan_aspirasi` (`id_pesan`, `kode_aspirasi`, `isi_pesan`, `tanggal_pesan`, `tipe_pengirim`, `status`, `id_masyarakat`) VALUES
+(85,	'N5B4Z3',	'Test aja',	'2018-11-04 01:26:26',	'user',	'',	9),
+(86,	'N5B4Z3',	'test',	'2018-11-04 01:29:14',	'admin',	'',	0);
 
 DROP TABLE IF EXISTS `roles`;
 CREATE TABLE `roles` (
@@ -414,6 +524,15 @@ INSERT INTO `satuan` (`id`, `nama`) VALUES
 (2,	'g'),
 (3,	'Pcs');
 
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE `user` (
+  `username` varchar(100) NOT NULL,
+  `password` varchar(100) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+INSERT INTO `user` (`username`, `password`) VALUES
+('admin',	'21232f297a57a5a743894a0e4a801fc3');
+
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -436,10 +555,10 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `users` (`id`, `name`, `foto`, `alamat`, `tempat_lahir`, `tanggal_lahir`, `kelamin`, `email`, `username`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1,	'Administrator',	NULL,	'Enhaka Residence Blok C7',	'Garut',	'1996-09-09',	'L',	'admin@mail.com',	'admin',	'2018-09-10 17:37:12',	'$2y$10$3AstsrfUxW1TejXbdGSgj.1RtFxQ7X/qYkirDdj6EgWB6vWRfvqma',	'Ohrju8nhkr3F0Q7Hd81rAqmjXOY0zS9TBcbL5MyDQKNAtoX4Ut9ScqyIvmEJ',	'2018-09-10 17:37:19',	'2018-09-11 11:16:36'),
+(1,	'Admin WMD',	NULL,	'Enhaka Residence Blok C7',	'Garut',	'1996-09-09',	'L',	'admin@mail.com',	'admin',	'2018-09-10 17:37:12',	'$2y$10$3AstsrfUxW1TejXbdGSgj.1RtFxQ7X/qYkirDdj6EgWB6vWRfvqma',	'vWnxrfemsnP8HUVGC6HduYJKLLwNik9hvvUif2LzHvO63HKtw4w7QsceBpsJ',	'2018-09-10 17:37:19',	'2018-10-01 04:27:40'),
 (4,	'Antonio Saiful Islam',	NULL,	'Enhaka Residence Blok C7',	'Garut',	'1996-09-09',	'L',	'finallyantonio@gmail.com',	'antoniosai',	NULL,	'$2y$10$qq42ATCqcQ75Tk.ZbQ3ohu9rI/3AlMxsu4O2KsaDjvgKkwLuZgkGW',	NULL,	'2018-09-13 00:23:54',	'2018-09-13 00:38:49'),
 (5,	'Achmad Yalzan',	NULL,	'Garut',	'Garut',	'1995-12-11',	'L',	'codeone@gmail.com',	'codeone',	NULL,	'$2y$10$WEn26Qvd/2z4zLfyiP.LAOw2BVhfVgGgA9J.4JgsJLk0LBjx4CqkS',	NULL,	'2018-09-13 03:29:12',	'2018-09-13 03:29:12'),
 (6,	'Dapur',	NULL,	'WMD',	'Garut',	'1996-09-09',	'L',	'dapur@wmd.com',	'dapur',	NULL,	'$2y$10$/GH4FOH98OIhhr2mSxBcZOMPvPseQ26h0xjAhTvJsFn2hgQO7gIbC',	'qBeLv1PzLRcaGTd2QpBsF8whz5LpKr3TPJFDLBJA9wknYRPf6FxmvRMUAbFX',	'2018-09-13 03:34:55',	'2018-09-22 15:30:31'),
 (7,	'Admin WMD',	'images/user/3-logo.jpg',	'Garut',	'Garut',	'2018-08-28',	'L',	'wmdgarut@gmail.com',	'wmd',	NULL,	'$2y$10$v5VzUjnm.7k9/L8/p9d8DOzf2KV.zq/CmqcdVLnR2eg6EgTZORDHG',	'jqKqwrTS8I6lPuyeiZDK7OZdiO2YwlmNGGl2ByQdb7wY6gT5toqBiTUlxJrw',	'2018-09-27 06:39:42',	'2018-09-27 06:39:42');
 
--- 2018-09-30 03:41:13
+-- 2018-12-06 06:14:00
